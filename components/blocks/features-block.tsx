@@ -6,6 +6,7 @@ import { paletteGrad } from "@/lib/palette"
 import { ScrollReveal } from "@/components/animate/scroll-reveal"
 import { useCMS } from "@/lib/store"
 import type { Bundle } from "@/lib/types"
+import { Shield } from "lucide-react"
 
 export function FeaturesBlock({ data, isRTL, palette }: { data: Bundle; isRTL: boolean; palette: ReturnType<typeof paletteGrad> }) {
   const { design } = useCMS()
