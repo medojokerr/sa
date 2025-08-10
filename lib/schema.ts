@@ -48,6 +48,24 @@ export async function ensureSchema() {
   await sql`CREATE INDEX IF NOT EXISTS idx_rate_limits_key_ts ON rate_limits (key, ts DESC);`
   await sql`CREATE INDEX IF NOT EXISTS idx_content_snapshots_locale_created ON content_snapshots (locale, created_at DESC);`
 
+  // Reviews table for customer feedback
+  await sql`
+  CREATE TABLE IF NOT EXISTS reviews (
+    id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    message TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('pending','approved','rejected')) DEFAULT 'pending',
+    ip TEXT,
+    user_agent TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  );`
+
+  await sql`CREATE INDEX IF NOT EXISTS idx_reviews_status_created ON reviews (status, created_at DESC);`
+  await sql`CREATE INDEX IF NOT EXISTS idx_reviews_created ON reviews (created_at DESC);`
+
   // New chat_sessions and chat_messages tables and indexes
   await sql`
   CREATE TABLE IF NOT EXISTS chat_sessions (
