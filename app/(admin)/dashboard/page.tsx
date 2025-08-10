@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { SimpleLineChart } from "@/components/dashboard/charts"
 import { AdminBridge } from "@/components/admin/admin-bridge"
+import { SecurityMonitor } from "@/components/admin/security-monitor"
 import { useAppSelector } from "@/lib/redux/store"
 import { Loader2, RefreshCcw, UsersIcon, Database, Shield, TrendingUp, Activity, Eye, MessageSquare } from 'lucide-react'
 
@@ -110,7 +111,7 @@ export default function DashboardHome() {
                 {locale === "ar" ? "مرحباً بك في لوحة التحكم" : "Welcome to Dashboard"}
               </h1>
               <p className="text-muted-foreground">
-                {locale === "ar" ? "إدارة شاملة ل��وقعك ومحتواه وعملائك" : "Complete management of your site, content, and customers"}
+                {locale === "ar" ? "إدارة شاملة لموقعك ومحتواه وعملائك" : "Complete management of your site, content, and customers"}
               </p>
             </div>
             <div className="flex items-center gap-2">
