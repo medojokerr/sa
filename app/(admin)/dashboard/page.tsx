@@ -99,6 +99,8 @@ export default function DashboardHome() {
 
   return (
     <div className="grid gap-6">
+      {/* Admin Bridge - Live Connection */}
+      <AdminBridge />
       {/* Welcome section */}
       <Card className="border-neutral-200/60 bg-gradient-to-r from-violet-50 to-emerald-50 dark:from-violet-950/20 dark:to-emerald-950/20">
         <CardContent className="p-6">
@@ -108,7 +110,7 @@ export default function DashboardHome() {
                 {locale === "ar" ? "مرحباً بك في لوحة التحكم" : "Welcome to Dashboard"}
               </h1>
               <p className="text-muted-foreground">
-                {locale === "ar" ? "إدارة شاملة لموقعك ومحتواه وعملائك" : "Complete management of your site, content, and customers"}
+                {locale === "ar" ? "إدارة شاملة ل��وقعك ومحتواه وعملائك" : "Complete management of your site, content, and customers"}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -208,7 +210,7 @@ export default function DashboardHome() {
             </p>
             <Button variant="outline" className="w-full" asChild>
               <a href="/dashboard/content">
-                {locale === "ar" ? "الذهاب إ��ى المحتوى" : "Go to Content"}
+                {locale === "ar" ? "الذهاب إلى المحتوى" : "Go to Content"}
               </a>
             </Button>
           </CardContent>
