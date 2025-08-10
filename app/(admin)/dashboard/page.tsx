@@ -102,6 +102,10 @@ export default function DashboardHome() {
     <div className="grid gap-6">
       {/* Admin Bridge - Live Connection */}
       <AdminBridge />
+
+      {/* Security & Performance Monitor */}
+      <SecurityMonitor />
+
       {/* Welcome section */}
       <Card className="border-neutral-200/60 bg-gradient-to-r from-violet-50 to-emerald-50 dark:from-violet-950/20 dark:to-emerald-950/20">
         <CardContent className="p-6">
