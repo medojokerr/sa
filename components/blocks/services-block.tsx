@@ -164,7 +164,7 @@ export function ServicesBlock({
         .filter((s) => (q.trim() ? s.name.toLowerCase().includes(q.toLowerCase()) : true))
         .sort((a, b) => {
           // Primary stable sort by configured sort field
-          let res = (a.sort ?? 0) - (b.sort ?? 0)
+          const res = (a.sort ?? 0) - (b.sort ?? 0)
           if (popularFirst) {
             // Popular items first
             const pa = a.popular ? 1 : 0
