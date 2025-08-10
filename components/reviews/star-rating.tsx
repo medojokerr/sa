@@ -66,3 +66,6 @@ export function StarsInput({
     </div>
   )
 }
+
+// Alias for compatibility
+export const StarRating = Stars
