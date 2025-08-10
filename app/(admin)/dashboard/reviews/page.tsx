@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { StarRating } from "@/components/reviews/star-rating"
 import { useAppSelector } from "@/lib/redux/store"
-import { CheckCircle, XCircle, Eye, MessageSquare, Loader2 } from "lucide-react"
+import { CheckCircle, XCircle, MessageSquare, Loader2 } from "lucide-react"
 
 type Review = {
   id: string
