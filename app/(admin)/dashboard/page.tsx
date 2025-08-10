@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { SimpleLineChart } from "@/components/dashboard/charts"
+import { AdminBridge } from "@/components/admin/admin-bridge"
 import { useAppSelector } from "@/lib/redux/store"
 import { Loader2, RefreshCcw, UsersIcon, Database, Shield, TrendingUp, Activity, Eye, MessageSquare } from 'lucide-react'
 
@@ -60,7 +61,7 @@ export default function DashboardHome() {
         bgColor: "bg-blue-50 dark:bg-blue-950/20"
       },
       { 
-        title: locale === "ar" ? "عدد المستخدمين" : "Users", 
+        title: locale === "ar" ? "��دد المستخدمين" : "Users", 
         value: usersCount === null ? "—" : usersCount.toString(),
         icon: UsersIcon,
         color: "text-emerald-600",
@@ -207,7 +208,7 @@ export default function DashboardHome() {
             </p>
             <Button variant="outline" className="w-full" asChild>
               <a href="/dashboard/content">
-                {locale === "ar" ? "الذهاب إلى المحتوى" : "Go to Content"}
+                {locale === "ar" ? "الذهاب إ��ى المحتوى" : "Go to Content"}
               </a>
             </Button>
           </CardContent>
