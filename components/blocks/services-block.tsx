@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import type { paletteGrad } from "@/lib/palette"
 import { ScrollReveal } from "@/components/animate/scroll-reveal"
+import { Magnetic } from "@/components/animate/magnetic"
 import { useCMS } from "@/lib/store"
 import type { Bundle, Locale } from "@/lib/types"
 import { Filter, MessageCircle, Search, Star } from "lucide-react"
@@ -15,7 +16,7 @@ import { useMemo, useState } from "react"
 /**
  * Build WhatsApp deep link for service order.
  */
-function buildWhatsApp(service: string, price: string, locale: Locale = "ar", brand = "kyctrust") {
+function buildWhatsApp(service: string, price: string, locale: Locale = "ar", brand = "KYCtrust") {
   const phone = "201062453344"
   const timestamp = Date.now()
   const requestId = `LP-${timestamp}`
@@ -48,21 +49,12 @@ function buildWhatsApp(service: string, price: string, locale: Locale = "ar", br
 /**
  * Normalize name for lookups (strip spaces, case, non-alphanumerics).
  */
-function normalizeName(s: string) {
-  return (
-    String(s || "")
-      .toLowerCase()
-      .normalize("NFKD")
-      // remove diacritics
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s+/g, "")
-      .replace(/[^a-z0-9]/g, "")
-  )
+function normalizeName(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, "")
 }
 
 /**
- * Curated mapping to official local assets (already in /public/images/logos).
- * Ensures we show the correct brand icon even if the Logos list misses a match.
+ * Curated mapping: service name -> logo path.
  */
 const officialLogos: Record<string, string> = {
   payoneer: "/images/logos/payoneer.png",
@@ -74,8 +66,8 @@ const officialLogos: Record<string, string> = {
   bybit: "/images/logos/bybit.png",
   bitget: "/images/logos/bitget.png",
   kucoin: "/images/logos/kucoin.png",
-  exness: "/images/logos/exness.png",
   mexc: "/images/logos/mexc.png",
+  exness: "/images/logos/exness.png",
   vodafonecash: "/images/logos/vodafone-cash.png",
 }
 
@@ -92,7 +84,7 @@ function resolveIconSrc(serviceName: string, explicit?: string, logos?: { name: 
   const fromLogos = (logos || []).find((l) => normalizeName(l.name) === key)?.src
   if (fromLogos) return fromLogos
   if (officialLogos[key]) return officialLogos[key]
-  return "/generic-financial-logo.png" + encodeURIComponent(serviceName)
+  return "/generic-financial-logo.png"
 }
 
 /**
@@ -158,10 +150,12 @@ export function ServicesBlock({
   const [q, setQ] = useState<string>("")
   const [popularFirst, setPopularFirst] = useState<boolean>(true)
   const [nameAsc, setNameAsc] = useState<boolean>(false)
+  
   const categories = useMemo(
     () => ["all", ...Array.from(new Set(data.services.map((s) => s.category)))],
     [data.services],
   )
+  
   const services = useMemo(
     () =>
       data.services
@@ -185,6 +179,7 @@ export function ServicesBlock({
         }),
     [data.services, category, q, popularFirst, nameAsc],
   )
+  
   const logos = Array.isArray(data.logos) ? data.logos : []
   const { design } = useCMS()
   const enable = design.anim?.enableReveal !== false
@@ -274,45 +269,6 @@ export function ServicesBlock({
         </div>
 
         {/* Services grid with enhanced cards */}
-          <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60 rtl:right-3 rtl:left-auto" />
-            <Input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder={isRTL ? "ابحث عن الخدمة..." : "Search services..."}
-              className="ps-9 pe-3 py-6 rounded-xl"
-              aria-label={isRTL ? "بحث في الخدمات" : "Search services"}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {categories.map((c) => {
-              const active = category === c
-              return (
-                <Button
-                  key={c}
-                  variant={active ? "default" : "outline"}
-                  onClick={() => setCategory(c)}
-                  className={active ? `bg-gradient-to-r ${palette.range} text-white` : ""}
-                >
-                  <Filter className="h-4 w-4 me-2" />
-                  {c === "all" ? (isRTL ? "الكل" : "All") : c}
-                </Button>
-              )
-            })}
-          </div>
-        </div>
-
-        <div className="mx-auto mt-3 flex max-w-4xl flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
-            <input type="checkbox" checked={popularFirst} onChange={(e) => setPopularFirst(e.target.checked)} />
-            {isRTL ? "الأكثر طلباً أولاً" : "Popular first"}
-          </label>
-          <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
-            <input type="checkbox" checked={nameAsc} onChange={(e) => setNameAsc(e.target.checked)} />
-            {isRTL ? "ترتيب أبجدي" : "Sort by name"}
-          </label>
-        </div>
-
         <div
           className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           role="list"
@@ -320,89 +276,56 @@ export function ServicesBlock({
         >
           {services.map((s, i) => {
             const iconSrc = resolveIconSrc(s.name, s.iconImage, logos)
-            const hasRealIcon = Boolean(iconSrc)
             const meta = buildServiceMeta(s.name, s.category, locale)
 
             const CardInner = (
-              <Card
-                key={s.name} // Added key property
-                className="group relative border-neutral-200/60 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/10 dark:border-neutral-800/60 dark:bg-neutral-900/60"
-                role="listitem"
-              >
-                <CardContent className="p-8">
-                  {/* Popular badge */}
-                  {s.popular && (
-                    <div className="absolute -top-2 -right-2">
-                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg">
-                        <Star className="me-1 h-3 w-3" />
-                        {isRTL ? "الأكثر طلباً" : "Most Popular"}
-                      </Badge>
+              <Card className="group relative h-full border-neutral-200/60 bg-white/90 backdrop-blur transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 dark:border-neutral-800/60 dark:bg-neutral-900/80">
+                <CardContent className="p-6 flex flex-col h-full">
+                  {/* Service icon and popular badge */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="relative">
+                      <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-neutral-100 to-neutral-200 p-2 shadow-md dark:from-neutral-800 dark:to-neutral-700">
+                        <Image
+                          src={iconSrc}
+                          alt={`${s.name} logo`}
+                          width={40}
+                          height={40}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
                     </div>
-                  )}
-                  
-                  <div className="mb-4 flex items-start justify-between gap-3">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <div
-                        className={`grid h-14 w-14 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br ${palette.range} text-white shadow-lg ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}
-                        aria-hidden={!hasRealIcon}
-                      >
-                        {iconSrc ? (
-                          <Image
-                            src={iconSrc || "/placeholder.svg"}
-                            alt={`${s.name} logo`}
-                            width={56}
-                            height={56}
-                            sizes="(max-width: 768px) 56px, 56px"
-                            className="h-14 w-14 object-contain"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <span className="text-2xl leading-none" aria-label={`${s.name} icon`}>
-                            {s.icon}
-                          </span>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          {/* Inline chip for quick brand recognition */}
-                          <span className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground bg-muted/50">
-                            <span className="relative inline-block h-4 w-4 overflow-hidden rounded">
-                              <Image
-                                src={iconSrc || "/placeholder.svg"}
-                                alt={`${s.name} mini logo`}
-                                width={16}
-                                height={16}
-                                className="h-4 w-4 object-contain"
-                                loading="lazy"
-                              />
-                            </span>
-                            {s.name}
-                          </span>
-                        </div>
-                        <p className="mt-2 text-sm text-muted-foreground font-medium">
-                          {s.category}
-                          {" · "}
-                          {meta.type}
-                        </p>
-                      </div>
+                    {s.popular && (
+                      <Badge className={`bg-gradient-to-r ${palette.range} text-white shadow-lg`}>
+                        <Star className="h-3 w-3 me-1 fill-current" />
+                        {isRTL ? "الأكثر طلباً" : "Popular"}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {/* Service info */}
+                  <div className="flex-1">
+                    <div className="mb-3">
+                      <h3 className="text-lg font-bold">{s.name}</h3>
+                      <p className="text-xs text-muted-foreground font-medium">{meta.type}</p>
                     </div>
 
-                    <div className="text-end shrink-0">
-                      <p
-                        className={`bg-gradient-to-r ${palette.range} bg-clip-text text-3xl md:text-4xl font-extrabold text-transparent`}
+                    {/* Price with enhanced styling */}
+                    <div className="mb-4">
+                      <p 
+                        className={`text-2xl font-bold bg-gradient-to-r ${palette.range} bg-clip-text text-transparent`}
                         aria-label={isRTL ? `السعر ${s.price}` : `Price ${s.price}`}
                       >
                         {s.price}
                       </p>
                       {s.note ? <p className="mt-2 text-xs text-muted-foreground font-medium">{s.note}</p> : null}
                     </div>
-                  </div>
 
-                  {/* Clear, richer description */}
-                  <p className="mb-4 line-clamp-3 text-base leading-relaxed text-muted-foreground">{s.description}</p>
-                  <p className="mb-6 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3">
-                    {isRTL ? "الهدف:" : "Purpose:"} {meta.purpose}
-                  </p>
+                    {/* Clear, richer description */}
+                    <p className="mb-4 line-clamp-3 text-base leading-relaxed text-muted-foreground">{s.description}</p>
+                    <p className="mb-6 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3">
+                      {isRTL ? "الهدف:" : "Purpose:"} {meta.purpose}
+                    </p>
+                  </div>
 
                   <div className="flex items-center justify-between gap-3">
                     <Badge variant="secondary" className="rounded-full px-3 py-1">
