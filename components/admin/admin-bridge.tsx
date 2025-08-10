@@ -8,14 +8,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Progress } from "@/components/ui/progress"
 import { useCMS } from "@/lib/store"
 import { useToast } from "@/hooks/use-toast"
-import { 
-  Zap, 
-  CheckCircle, 
-  AlertCircle, 
-  RefreshCw, 
-  Globe, 
+import {
+  Zap,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
+  Globe,
   Eye,
-  Sync,
+  RotateCcw,
   Activity,
   TrendingUp,
   Users,
@@ -154,7 +154,7 @@ export function AdminBridge() {
 
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded">
-                <Sync className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <RotateCcw className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
                 <p className="text-sm font-medium">آخر مزامنة</p>
@@ -210,7 +210,7 @@ export function AdminBridge() {
               {isSyncing ? (
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
               ) : (
-                <Sync className="h-4 w-4 mr-2" />
+                <RotateCcw className="h-4 w-4 mr-2" />
               )}
               مزامنة التغييرات
             </Button>
