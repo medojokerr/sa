@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Globe, Moon, Sun, MessageCircle, Shield } from 'lucide-react'
 import { buildWhatsApp } from "@/lib/whatsapp"
+import { Magnetic } from "@/components/animate/magnetic"
 
 export function SiteHeader() {
   const { locale, content, design, setLocale } = useCMS()
