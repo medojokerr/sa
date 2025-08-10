@@ -8,7 +8,7 @@ import { useCMS } from "@/lib/store"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SiteForm, HeroForm, ServicesForm, PaymentsForm, FAQForm, LogosForm, TestimonialsForm, CTAForm, ContactForm } from "@/components/editor/forms"
 import Link from "next/link"
-import { Upload, Download, Save } from 'lucide-react'
+import { Upload, Download, Save, Database } from 'lucide-react'
 import { notifyPublished } from "@/lib/realtime"
 
 export default function ContentManagerPage() {
