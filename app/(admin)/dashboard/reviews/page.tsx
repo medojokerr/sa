@@ -72,29 +72,83 @@ export default function ReviewsAdminPage() {
 
   return (
     <div className="grid gap-4">
-      <Card>
+      {/* Header with stats */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card className="hover:shadow-lg transition-all duration-300">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm text-muted-foreground">Total Reviews</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold">{filtered.length}</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="hover:shadow-lg transition-all duration-300">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm text-muted-foreground">Pending</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold text-amber-600">
+              {filtered.filter(r => r.status === 'pending').length}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="hover:shadow-lg transition-all duration-300">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm text-muted-foreground">Approved</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold text-emerald-600">
+              {filtered.filter(r => r.status === 'approved').length}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="hover:shadow-lg transition-all duration-300">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm text-muted-foreground">Rejected</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold text-red-600">
+              {filtered.filter(r => r.status === 'rejected').length}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Reviews Moderation</CardTitle>
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <MessageCircle className="h-5 w-5" />
+              Reviews Moderation
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              Manage customer reviews and feedback
+            </p>
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <Input
               placeholder="Search name or comment…"
-              className="h-9 w-56"
+              className="h-9 w-64"
               value={q}
               onChange={(e) => setQ(e.target.value)}
             />
             <select
-              className="h-9 rounded-md border bg-transparent px-3"
+              className="h-9 rounded-md border bg-background px-3 text-sm"
               value={status}
               onChange={(e) => setStatus(e.target.value as any)}
             >
-              <option value="all">all</option>
-              <option value="pending">pending</option>
-              <option value="approved">approved</option>
-              <option value="rejected">rejected</option>
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
             </select>
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               <input
                 type="checkbox"
+                className="rounded"
                 checked={newestFirst}
                 onChange={(e) => setNewestFirst(e.target.checked)}
               />
@@ -108,12 +162,98 @@ export default function ReviewsAdminPage() {
         </CardHeader>
         <CardContent className="overflow-x-auto">
           {loading ? (
-            <div className="p-4 text-sm text-muted-foreground">Loading…</div>
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <span className="ml-2 text-sm text-muted-foreground">Loading reviews...</span>
+            </div>
           ) : filtered.length === 0 ? (
-            <div className="p-4 text-sm text-muted-foreground">No reviews</div>
+            <div className="text-center py-12">
+              <MessageCircle className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <p className="text-muted-foreground">No reviews found</p>
+            </div>
           ) : (
-            <table className="w-full text-sm">
-              <thead className="text-left text-muted-foreground">
+            <div className="space-y-4">
+              {filtered.map((r) => (
+                <Card key={r.id} className="hover:shadow-md transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-400 to-blue-500 flex items-center justify-center text-white font-bold">
+                            {r.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <div className="font-semibold">{r.name}</div>
+                            <div className="flex items-center gap-2">
+                              {[1,2,3,4,5].map(star => (
+                                <div key={star} className={`h-4 w-4 ${star <= r.rating ? 'text-amber-400' : 'text-muted-foreground/30'}`}>
+                                  ★
+                                </div>
+                              ))}
+                              <span className="text-sm text-muted-foreground">({r.rating}/5)</span>
+                            </div>
+                          </div>
+                        </div>
+                        <blockquote className="text-muted-foreground italic border-l-4 border-muted pl-4 mb-3">
+                          "{r.comment}"
+                        </blockquote>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <span>{new Date(r.created_at).toLocaleString()}</span>
+                          <Badge
+                            variant={
+                              r.status === "approved" ? "default" : r.status === "rejected" ? "destructive" : "secondary"
+                            }
+                          >
+                            {r.status}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setStatus(r.id, "approved")}
+                          disabled={busy === r.id}
+                          className="text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                        >
+                          {busy === r.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <>
+                              <CheckCircle2 className="h-4 w-4 mr-1" />
+                              Approve
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setStatus(r.id, "rejected")}
+                          disabled={busy === r.id}
+                          className="text-red-600 border-red-200 hover:bg-red-50"
+                        >
+                          {busy === r.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <>
+                              <XCircle className="h-4 w-4 mr-1" />
+                              Reject
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
                 <tr className="border-b">
                   <th className="p-2">Name</th>
                   <th className="p-2">Rating</th>

@@ -8,6 +8,10 @@ import { Shield } from "lucide-react"
 import { subscribePublished } from "@/lib/realtime"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
+import { StructuredData } from "@/components/seo/structured-data"
+import { PerformanceMonitor } from "@/components/performance/performance-monitor"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 // Lazy-loaded, non-critical components to reduce initial bundle size
 const ChatbotWidget = dynamic(
   () => import("@/components/chatbot/chatbot-widget").then(m => m.ChatbotWidget),
@@ -646,15 +650,19 @@ export default function Page() {
   }, [setContent, setDesign])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-emerald-50/40 to-white text-neutral-900 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950 dark:text-neutral-100">
-      <PerfHints />
-      <SiteHeader />
-      <main id="main-content">
-        <BlocksRenderer />
-        <ReviewsSection />
-      </main>
-      <SiteFooter />
-      <ChatbotWidget />
-    </div>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-emerald-50/30 to-blue-50/20 text-neutral-900 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950 dark:text-neutral-100">
+        <StructuredData />
+        <PerfHints />
+        <SiteHeader />
+        <main id="main-content">
+          <BlocksRenderer />
+          <ReviewsSection />
+        </main>
+        <SiteFooter />
+        <ChatbotWidget />
+        <Toaster />
+      </div>
+    </ThemeProvider>
   )
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 export const viewport: Viewport = {
@@ -31,6 +32,11 @@ export const metadata: Metadata = {
     'Skrill',
     'Neteller',
     'خدمات مالية',
+    'digital banking',
+    'e-wallets',
+    'financial services',
+    'secure payments',
+    'crypto exchange accounts'
   ],
   icons: {
     icon: [
@@ -87,22 +93,46 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://wa.me" />
+        <link rel="dns-prefetch" href="https://api.kyctrust.site" />
         <style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};
   --font-sans: ${GeistSans.variable};
   --font-mono: ${GeistMono.variable};
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #7c3aed, #10b981);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #6d28d9, #059669);
 }
         `}</style>
       </head>
       <body>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:z-50 focus:rounded focus:bg-emerald-600 focus:px-3 focus:py-2 focus:text-white"
-        >
-          تخطّي إلى المحتوى
-        </a>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:z-50 focus:rounded focus:bg-emerald-600 focus:px-3 focus:py-2 focus:text-white"
+          >
+            تخطّي إلى المحتوى
+          </a>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
