@@ -51,7 +51,7 @@ export function HeroBlock({
               </Badge>
               <Badge className="bg-blue-500/10 text-blue-700 border-blue-200 dark:text-blue-300 dark:border-blue-800">
                 <Clock className="h-3 w-3 me-1" />
-                {isRTL ? "تسليم سريع" : "Fast Delivery"}
+                {isRTL ? "تسليم س��يع" : "Fast Delivery"}
               </Badge>
               <Badge className="bg-amber-500/10 text-amber-700 border-amber-200 dark:text-amber-300 dark:border-amber-800">
                 <Award className="h-3 w-3 me-1" />
@@ -160,31 +160,6 @@ export function HeroBlock({
           ))}
         </div>
         
-        {/* Video/Demo section */}
-        <div className="mx-auto mt-20 max-w-4xl">
-          <Card className="overflow-hidden border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
-            <CardContent className="p-0">
-              <div className="relative aspect-video bg-gradient-to-br from-neutral-100 to-neutral-200 dark:from-neutral-800 dark:to-neutral-900">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Button
-                    size="lg"
-                    className={`bg-gradient-to-r ${palette.range} text-white shadow-2xl hover:scale-105 transition-transform duration-300`}
-                  >
-                    <Play className="h-6 w-6 me-2" />
-                    {isRTL ? "شاهد كيف نعمل" : "See How We Work"}
-                  </Button>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="rounded-lg bg-black/50 backdrop-blur p-3 text-white">
-                    <p className="text-sm">
-                      {isRTL ? "شرح مبسط لعملية إنشاء الحسابات في 3 دقائق" : "Simple 3-minute guide to account creation"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </section>
   )
