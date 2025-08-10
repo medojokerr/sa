@@ -209,12 +209,71 @@ export function ServicesBlock({
     <section
       id="services"
       aria-labelledby="services-heading"
-      className="relative bg-gradient-to-b from-white to-emerald-50/40 px-4 py-16 dark:from-neutral-950 dark:to-neutral-950"
+      className="relative bg-gradient-to-b from-white via-emerald-50/30 to-blue-50/30 px-4 py-20 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950"
     >
+      {/* Background decorations */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute top-20 right-10 h-32 w-32 rounded-full bg-emerald-500/10 blur-2xl" />
+        <div className="absolute bottom-20 left-10 h-40 w-40 rounded-full bg-violet-500/10 blur-2xl" />
+      </div>
+      
       <div className="mx-auto max-w-7xl">
         {enable ? <ScrollReveal y={18 * k}>{Title}</ScrollReveal> : Title}
 
-        <div className="mx-auto mt-8 flex max-w-4xl flex-col items-stretch gap-4 lg:flex-row lg:items-center">
+        {/* Enhanced search and filters */}
+        <div className="mx-auto mt-12 max-w-5xl">
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:items-center">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 opacity-60 rtl:right-3 rtl:left-auto" />
+                  <Input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder={isRTL ? "ابحث عن الخدمة المطلوبة..." : "Search for the service you need..."}
+                    className="ps-10 pe-4 py-3 text-base rounded-xl border-2 focus:border-primary/50"
+                    aria-label={isRTL ? "بحث في الخدمات" : "Search services"}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {categories.map((c) => {
+                    const active = category === c
+                    return (
+                      <Button
+                        key={c}
+                        variant={active ? "default" : "outline"}
+                        onClick={() => setCategory(c)}
+                        className={active ? `bg-gradient-to-r ${palette.range} text-white shadow-md` : "hover:bg-accent/80"}
+                        size="sm"
+                      >
+                        <Filter className="h-4 w-4 me-2" />
+                        {c === "all" ? (isRTL ? "جميع الخدمات" : "All Services") : c}
+                      </Button>
+                    )
+                  })}
+                </div>
+              </div>
+              
+              <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap gap-4">
+                  <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                    <input type="checkbox" checked={popularFirst} onChange={(e) => setPopularFirst(e.target.checked)} className="rounded" />
+                    {isRTL ? "الأكثر طلباً أولاً" : "Popular first"}
+                  </label>
+                  <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                    <input type="checkbox" checked={nameAsc} onChange={(e) => setNameAsc(e.target.checked)} className="rounded" />
+                    {isRTL ? "ترتيب أبجدي" : "Sort alphabetically"}
+                  </label>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {isRTL ? `${services.length} خدمة متاحة` : `${services.length} services available`}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Services grid with enhanced cards */}
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60 rtl:right-3 rtl:left-auto" />
             <Input
@@ -255,7 +314,7 @@ export function ServicesBlock({
         </div>
 
         <div
-          className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           role="list"
           aria-label={isRTL ? "قائمة الخدمات" : "Services list"}
         >
@@ -267,28 +326,38 @@ export function ServicesBlock({
             const CardInner = (
               <Card
                 key={s.name} // Added key property
-                className="group border-neutral-200/60 bg-white/70 backdrop-blur transition-transform hover:-translate-y-1 hover:shadow-xl dark:border-neutral-800/60 dark:bg-neutral-900/50"
+                className="group relative border-neutral-200/60 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-primary/10 dark:border-neutral-800/60 dark:bg-neutral-900/60"
                 role="listitem"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-8">
+                  {/* Popular badge */}
+                  {s.popular && (
+                    <div className="absolute -top-2 -right-2">
+                      <Badge className="bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg">
+                        <Star className="me-1 h-3 w-3" />
+                        {isRTL ? "الأكثر طلباً" : "Most Popular"}
+                      </Badge>
+                    </div>
+                  )}
+                  
                   <div className="mb-4 flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
                       <div
-                        className={`grid h-11 w-11 place-items-center overflow-hidden rounded-xl bg-gradient-to-br ${palette.range} text-white shadow ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-[1.03]`}
+                        className={`grid h-14 w-14 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br ${palette.range} text-white shadow-lg ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}
                         aria-hidden={!hasRealIcon}
                       >
                         {iconSrc ? (
                           <Image
                             src={iconSrc || "/placeholder.svg"}
                             alt={`${s.name} logo`}
-                            width={44}
-                            height={44}
-                            sizes="(max-width: 768px) 44px, 44px"
-                            className="h-11 w-11 object-contain"
+                            width={56}
+                            height={56}
+                            sizes="(max-width: 768px) 56px, 56px"
+                            className="h-14 w-14 object-contain"
                             loading="lazy"
                           />
                         ) : (
-                          <span className="text-xl leading-none" aria-label={`${s.name} icon`}>
+                          <span className="text-2xl leading-none" aria-label={`${s.name} icon`}>
                             {s.icon}
                           </span>
                         )}
@@ -296,21 +365,21 @@ export function ServicesBlock({
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           {/* Inline chip for quick brand recognition */}
-                          <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
-                            <span className="relative inline-block h-3.5 w-3.5 overflow-hidden rounded">
+                          <span className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground bg-muted/50">
+                            <span className="relative inline-block h-4 w-4 overflow-hidden rounded">
                               <Image
                                 src={iconSrc || "/placeholder.svg"}
                                 alt={`${s.name} mini logo`}
-                                width={14}
-                                height={14}
-                                className="h-3.5 w-3.5 object-contain"
+                                width={16}
+                                height={16}
+                                className="h-4 w-4 object-contain"
                                 loading="lazy"
                               />
                             </span>
                             {s.name}
                           </span>
                         </div>
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="mt-2 text-sm text-muted-foreground font-medium">
                           {s.category}
                           {" · "}
                           {meta.type}
@@ -320,42 +389,40 @@ export function ServicesBlock({
 
                     <div className="text-end shrink-0">
                       <p
-                        className={`bg-gradient-to-r ${palette.range} bg-clip-text text-2xl font-extrabold text-transparent`}
+                        className={`bg-gradient-to-r ${palette.range} bg-clip-text text-3xl md:text-4xl font-extrabold text-transparent`}
                         aria-label={isRTL ? `السعر ${s.price}` : `Price ${s.price}`}
                       >
                         {s.price}
                       </p>
-                      {s.note ? <p className="mt-1 text-xs text-muted-foreground">{s.note}</p> : null}
+                      {s.note ? <p className="mt-2 text-xs text-muted-foreground font-medium">{s.note}</p> : null}
                     </div>
                   </div>
 
-                  {s.popular ? (
-                    <Badge className="mb-2 rounded-full bg-amber-500 text-white hover:bg-amber-500">
-                      <Star className="me-1 h-3.5 w-3.5" />
-                      {isRTL ? "الأكثر طلباً" : "Popular"}
-                    </Badge>
-                  ) : null}
-
                   {/* Clear, richer description */}
-                  <p className="mb-3 line-clamp-4 text-sm text-muted-foreground">{s.description}</p>
-                  <p className="mb-4 text-xs text-muted-foreground">
+                  <p className="mb-4 line-clamp-3 text-base leading-relaxed text-muted-foreground">{s.description}</p>
+                  <p className="mb-6 text-sm text-muted-foreground bg-muted/30 rounded-lg p-3">
                     {isRTL ? "الهدف:" : "Purpose:"} {meta.purpose}
                   </p>
 
-                  <div className="flex items-center justify-between">
-                    <Badge variant="secondary" className="rounded-full">
+                  <div className="flex items-center justify-between gap-3">
+                    <Badge variant="secondary" className="rounded-full px-3 py-1">
                       {s.category}
                     </Badge>
-                    <Button
-                      className={`bg-gradient-to-r ${palette.range} text-white`}
-                      onClick={() => window.open(buildWhatsApp(s.name, s.price, locale, data.site.name), "_blank")}
-                      size="sm"
-                      aria-label={isRTL ? `اطلب ${s.name} الآن` : `Order ${s.name} now`}
-                    >
-                      <MessageCircle className="h-4 w-4 me-2" />
-                      {isRTL ? "اطلب الآن" : "Order Now"}
-                    </Button>
+                    <Magnetic>
+                      <Button
+                        className={`bg-gradient-to-r ${palette.range} text-white shadow-lg hover:shadow-xl transition-all duration-300`}
+                        onClick={() => window.open(buildWhatsApp(s.name, s.price, locale, data.site.name), "_blank")}
+                        size="sm"
+                        aria-label={isRTL ? `اطلب ${s.name} الآن` : `Order ${s.name} now`}
+                      >
+                        <MessageCircle className="h-4 w-4 me-2" />
+                        {isRTL ? "اطلب الآن" : "Order Now"}
+                      </Button>
+                    </Magnetic>
                   </div>
+                  
+                  {/* Hover effect overlay */}
+                  <div aria-hidden className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-transparent group-hover:ring-primary/20 transition-all duration-300" />
                 </CardContent>
               </Card>
             )

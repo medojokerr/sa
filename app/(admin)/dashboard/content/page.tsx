@@ -94,7 +94,15 @@ export default function ContentManagerPage() {
     <div className="space-y-4">
       <Card>
         <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <CardTitle>Content Manager</CardTitle>
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Database className="h-5 w-5" />
+              {locale === "ar" ? "إدارة المحتوى" : "Content Manager"}
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              {locale === "ar" ? "تحرير ونشر محتوى الموقع" : "Edit and publish website content"}
+            </p>
+          </div>
           <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={exportJSON}>
               <Download className="mr-2 h-4 w-4" /> Export JSON
@@ -106,7 +114,7 @@ export default function ContentManagerPage() {
             <Link href="/dashboard/content/json" className="inline-flex items-center rounded-md border px-3 py-2 text-sm">
               Open JSON Editor
             </Link>
-            <Button onClick={publish}>
+            <Button onClick={publish} className="bg-gradient-to-r from-violet-600 to-emerald-600 text-white">
               <Save className="mr-2 h-4 w-4" /> Publish
             </Button>
           </div>
@@ -114,7 +122,7 @@ export default function ContentManagerPage() {
       </Card>
 
       <Tabs defaultValue="site" className="space-y-4">
-        <TabsList className="flex w-full flex-wrap justify-start">
+        <TabsList className="flex w-full flex-wrap justify-start bg-muted/50">
           <TabsTrigger value="site">Site</TabsTrigger>
           <TabsTrigger value="hero">Hero</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
@@ -127,31 +135,49 @@ export default function ContentManagerPage() {
         </TabsList>
 
         <TabsContent value="site">
-          <Card><CardContent className="p-4"><SiteForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><SiteForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="hero">
-          <Card><CardContent className="p-4"><HeroForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><HeroForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="services">
-          <Card><CardContent className="p-4"><ServicesForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><ServicesForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="payments">
-          <Card><CardContent className="p-4"><PaymentsForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><PaymentsForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="faq">
-          <Card><CardContent className="p-4"><FAQForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><FAQForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="logos">
-          <Card><CardContent className="p-4"><LogosForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><LogosForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="testimonials">
-          <Card><CardContent className="p-4"><TestimonialsForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><TestimonialsForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="cta">
-          <Card><CardContent className="p-4"><CTAForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><CTAForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="contact">
-          <Card><CardContent className="p-4"><ContactForm locale={cms.locale} /></CardContent></Card>
+          <Card className="border-neutral-200/60 bg-white/80 backdrop-blur dark:border-neutral-800/60 dark:bg-neutral-900/60">
+            <CardContent className="p-6"><ContactForm locale={cms.locale} /></CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
