@@ -1,0 +1,29 @@
+# Netlify configuration for Next.js (App Router)
+
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[functions]
+  # Ensure proper bundling for Next.js server functions
+  node_bundler = "esbuild"
+  included_files = ["public/**", "next.config.mjs"]
+  external_node_modules = ["sharp"]
+
+[dev]
+  command = "pnpm dev"
+  port = 3000
+  targetPort = 3000
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Optional security headers (most are already handled in next.config.mjs)
+# [[headers]]
+#   for = "/*"
+#   [headers.values]
+#     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+#     X-Content-Type-Options = "nosniff"
+#     X-Frame-Options = "DENY"
+#     Referrer-Policy = "strict-origin-when-cross-origin"
+#     Permissions-Policy = "geolocation=(), microphone=()"
