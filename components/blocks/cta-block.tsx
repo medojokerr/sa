@@ -7,7 +7,7 @@ import { paletteGrad } from "@/lib/palette"
 import { ScrollReveal } from "@/components/animate/scroll-reveal"
 import { useCMS } from "@/lib/store"
 
-export function CtaBlock({ data, isRTL, palette }: { data: Bundle; isRTL: boolean; palette: ReturnType<typeof paletteGrad> }) {
+export function CtaBlock({ data, isRTL: _isRTL, palette }: { data: Bundle; isRTL: boolean; palette: ReturnType<typeof paletteGrad> }) {
   const { design } = useCMS()
   const enable = design.anim?.enableReveal !== false
   const k = design.anim?.intensity ?? 1
