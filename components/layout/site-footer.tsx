@@ -3,6 +3,7 @@
 import { useCMS } from "@/lib/store"
 import { paletteGrad } from "@/lib/palette"
 import { cn } from "@/lib/utils"
+import { Shield, MessageCircle, Clock } from "lucide-react"
 
 export function SiteFooter() {
   const { design, locale, content } = useCMS()
