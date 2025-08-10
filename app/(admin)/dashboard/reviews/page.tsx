@@ -124,7 +124,7 @@ export default function ReviewsPage() {
                 <div className="space-y-1">
                   <CardTitle className="text-base">{review.name}</CardTitle>
                   <p className="text-sm text-muted-foreground">{review.email}</p>
-                  <StarRating rating={review.rating} />
+                  <StarRating value={review.rating} />
                 </div>
                 <div className="flex items-center gap-2">
                   {getStatusBadge(review.status)}
