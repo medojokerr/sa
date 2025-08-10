@@ -9,7 +9,6 @@ import { subscribePublished } from "@/lib/realtime"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { StructuredData } from "@/components/seo/structured-data"
-import { PerformanceMonitor } from "@/components/performance/performance-monitor"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 // Lazy-loaded, non-critical components to reduce initial bundle size
@@ -261,11 +260,11 @@ const siteData: Record<string, unknown> = {
       },
       {
         question: "ما هي طرق الدفع المتاحة؟",
-        answer: "نقبل الدفع عبر فودافون كاش والعملات الرقمية USDT TRC20 فقط لضمان الأمان والسرعة في المعاملات.",
+        answer: "نقبل الدفع عبر فودافون كاش والعملات الرقمية USDT TRC20 فقط لضمان الأمان والسرعة ��ي المعاملات.",
       },
       {
         question: "هل تقدمون خدمة ما بعد البيع؟",
-        answer: "بالطبع، نقدم دعم فني مجاني مدى الحياة لجميع عملائنا مع إرشادات مفصلة لاستخدام حساباتكم الجديدة.",
+        answer: "بالطبع، نقدم دعم فني مجاني مدى الحياة لجميع عملائنا مع إرشادات مفصلة لاست��دام حساباتكم الجديدة.",
       },
     ],
     contact: {
